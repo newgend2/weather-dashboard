@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#102a22">
+    <meta name="description" content="Live five-minute weather observations from Weather 1.">
+    <title>Weather 1 · Field Station</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="brand" href="./" aria-label="Weather 1 home">
+          <span class="brand-mark" aria-hidden="true"><span></span></span>
+          <span>
+            <strong>Weather 1</strong>
+            <small>Field station</small>
+          </span>
+        </a>
+        <div id="station-state" class="state-pill state-loading" role="status">
+          <span class="state-dot"></span>
+          <span id="state-label">Connecting</span>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero" aria-labelledby="hero-title">
+          <div>
+            <p class="eyebrow">Latest observation</p>
+            <h1 id="hero-title">Weather at a glance.</h1>
+            <p id="observation-time" class="observation-time">Waiting for the first station update…</p>
+          </div>
+          <button id="refresh-button" class="refresh-button" type="button">
+            <span aria-hidden="true">↻</span> Refresh
+          </button>
+        </section>
+
+        <section class="reading-grid" aria-label="Current weather readings">
+          <article class="reading-card temperature-card">
+            <div class="card-label"><span class="metric-icon">°</span> Temperature</div>
+            <div class="reading"><span id="temperature">--</span><small>°C</small></div>
+            <p id="temperature-range">Five-minute range unavailable</p>
+          </article>
+          <article class="reading-card humidity-card">
+            <div class="card-label"><span class="metric-icon">◒</span> Humidity</div>
+            <div class="reading"><span id="humidity">--</span><small>%</small></div>
+            <p id="humidity-range">Five-minute range unavailable</p>
+          </article>
+          <article class="reading-card pressure-card">
+            <div class="card-label"><span class="metric-icon">↧</span> Pressure</div>
+            <div class="reading"><span id="pressure">--</span><small>hPa</small></div>
+            <p id="pressure-range">Five-minute range unavailable</p>
+          </article>
+          <article class="reading-card wind-card">
+            <div class="card-label"><span class="metric-icon">≈</span> Wind</div>
+            <div class="reading"><span id="wind">--</span><small>m/s</small></div>
+            <p id="wind-range">Five-minute maximum unavailable</p>
+          </article>
+        </section>
+
+        <section class="chart-panel" aria-labelledby="chart-title">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Last 24 hours</p>
+              <h2 id="chart-title">Conditions over time</h2>
+            </div>
+            <div class="metric-tabs" role="group" aria-label="Chart metric">
+              <button class="metric-tab active" data-metric="temperature_c" type="button">Temperature</button>
+              <button class="metric-tab" data-metric="relative_humidity_percent" type="button">Humidity</button>
+              <button class="metric-tab" data-metric="pressure_hpa" type="button">Pressure</button>
+              <button class="metric-tab" data-metric="wind_speed_m_s" type="button">Wind</button>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="history-chart" aria-label="Weather history chart"></canvas>
+            <div id="chart-empty" class="chart-empty">History will appear after observations arrive.</div>
+          </div>
+          <div class="chart-legend">
+            <span id="chart-min">Low --</span>
+            <span id="chart-unit">Temperature · °C</span>
+            <span id="chart-max">High --</span>
+          </div>
+        </section>
+
+        <section class="health-panel" aria-labelledby="health-title">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Station health</p>
+              <h2 id="health-title">Field link and recorder</h2>
+            </div>
+            <p class="privacy-note">Approximate location only · coordinates private</p>
+          </div>
+          <dl class="health-grid">
+            <div><dt>Samples in bucket</dt><dd id="sample-count">--</dd></div>
+            <div><dt>Wi-Fi signal</dt><dd id="wifi-signal">--</dd></div>
+            <div><dt>Storage used</dt><dd id="disk-used">--</dd></div>
+            <div><dt>Clock</dt><dd id="clock-state">--</dd></div>
+            <div><dt>Upload backlog</dt><dd id="backlog">--</dd></div>
+            <div><dt>Next wake</dt><dd id="next-wake">--</dd></div>
+          </dl>
+        </section>
+
+        <div id="error-banner" class="error-banner" hidden role="alert"></div>
+      </main>
+
+      <footer>
+        <p>Local two-second observations are summarized into five-minute updates.</p>
+        <p><span id="api-state">API not checked</span> · <a href="https://github.com/newgend2/weather-dashboard">Source</a></p>
+      </footer>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
