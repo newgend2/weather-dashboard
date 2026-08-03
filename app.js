@@ -2,8 +2,15 @@
   "use strict";
 
   const config = window.WEATHER_CONFIG;
+  const celsiusToFahrenheit = (value) =>
+    Number.isFinite(value) ? (value * 9) / 5 + 32 : value;
   const metricMeta = {
-    temperature_c: { label: "Temperature", unit: "°C", color: "#d9823b" },
+    temperature_c: {
+      label: "Temperature",
+      unit: "°F",
+      color: "#d9823b",
+      displayValue: celsiusToFahrenheit,
+    },
     relative_humidity_percent: { label: "Humidity", unit: "%", color: "#4d86a2" },
     pressure_hpa: { label: "Pressure", unit: "hPa", color: "#668355" },
     wind_speed_m_s: { label: "Wind", unit: "m/s", color: "#75659b" },
@@ -28,11 +35,11 @@
     }).format(date);
   }
 
-  function rangeText(summary, unit, prefix = "Range") {
+  function rangeText(summary, unit, prefix = "Range", displayValue = (value) => value) {
     if (!summary || !Number.isFinite(summary.min) || !Number.isFinite(summary.max)) {
       return "Five-minute range unavailable";
     }
-    return `${prefix} ${number(summary.min)}–${number(summary.max)} ${unit}`;
+    return `${prefix} ${number(displayValue(summary.min))}–${number(displayValue(summary.max))} ${unit}`;
   }
 
   function stationState(reading) {
@@ -61,11 +68,16 @@
     byId("observation-time").textContent =
       `${formatTime(reading.bucket_end_utc)} · ${age < 1 ? "just now" : `${age} min ago`}`;
 
-    byId("temperature").textContent = number(reading.temperature_c?.latest);
+    byId("temperature").textContent = number(celsiusToFahrenheit(reading.temperature_c?.latest));
     byId("humidity").textContent = number(reading.relative_humidity_percent?.latest);
     byId("pressure").textContent = number(reading.pressure_hpa?.latest);
     byId("wind").textContent = number(reading.wind_speed_m_s?.latest);
-    byId("temperature-range").textContent = rangeText(reading.temperature_c, "°C");
+    byId("temperature-range").textContent = rangeText(
+      reading.temperature_c,
+      "°F",
+      "Range",
+      celsiusToFahrenheit,
+    );
     byId("humidity-range").textContent = rangeText(reading.relative_humidity_percent, "%");
     byId("pressure-range").textContent = rangeText(reading.pressure_hpa, "hPa");
     byId("wind-range").textContent = Number.isFinite(reading.wind_speed_m_s?.max)
@@ -102,10 +114,11 @@
   }
 
   function chartValues() {
+    const displayValue = metricMeta[activeMetric].displayValue || ((value) => value);
     return history
       .map((reading) => ({
         time: Date.parse(reading.bucket_end_utc),
-        value: reading[activeMetric]?.mean,
+        value: displayValue(reading[activeMetric]?.mean),
       }))
       .filter((point) => Number.isFinite(point.time) && Number.isFinite(point.value));
   }
