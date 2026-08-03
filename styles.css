@@ -17,6 +17,8 @@
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 
+html, body { overflow-x: hidden; }
+
 body {
   margin: 0;
   min-width: 320px;
@@ -78,7 +80,7 @@ h2 { margin-bottom: 0; font-size: clamp(23px, 3vw, 32px); letter-spacing: -.035e
 
 .reading-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
 .reading-card, .chart-panel, .health-panel { border: 1px solid var(--line); background: var(--panel); box-shadow: var(--shadow); backdrop-filter: blur(14px); }
-.reading-card { min-height: 210px; padding: 22px; border-radius: 22px; overflow: hidden; position: relative; }
+.reading-card { min-width: 0; min-height: 210px; padding: 22px; border-radius: 22px; overflow: hidden; position: relative; }
 .reading-card::after { content: ""; position: absolute; width: 140px; height: 140px; border-radius: 50%; right: -70px; bottom: -75px; background: var(--card-accent, var(--lime)); opacity: .18; }
 .temperature-card { --card-accent: #df9d55; }
 .humidity-card { --card-accent: #6aa3bd; }
@@ -119,7 +121,9 @@ footer p { margin: 0; }
 
 @media (max-width: 570px) {
   .page-shell { width: min(100% - 24px, 1180px); }
-  .site-header { min-height: 76px; }
+  .site-header { min-height: 76px; gap: 10px; }
+  .brand { min-width: 0; }
+  .state-pill { flex: 0 1 auto; max-width: 46%; padding: 7px 10px; font-size: 11px; white-space: nowrap; }
   .hero { padding-top: 46px; align-items: start; flex-direction: column; }
   .reading-grid { grid-template-columns: 1fr; }
   .reading-card { min-height: 180px; }
