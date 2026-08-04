@@ -66,7 +66,7 @@
         <section class="chart-panel" aria-labelledby="chart-title">
           <div class="panel-heading">
             <div>
-              <p class="eyebrow">Last 24 hours</p>
+              <p id="history-period-label" class="eyebrow">Selected day</p>
               <h2 id="chart-title">Conditions over time</h2>
             </div>
             <div class="metric-tabs" role="group" aria-label="Chart metric">
@@ -76,14 +76,36 @@
               <button class="metric-tab" data-metric="wind_speed_m_s" type="button">Wind</button>
             </div>
           </div>
-          <div class="chart-wrap">
-            <canvas id="history-chart" aria-label="Weather history chart"></canvas>
-            <div id="chart-empty" class="chart-empty">History will appear after observations arrive.</div>
+
+          <div class="history-controls">
+            <div class="range-tabs" role="group" aria-label="History range">
+              <button class="range-tab active" data-range="1D" type="button">1D</button>
+              <button class="range-tab" data-range="5D" type="button">5D</button>
+              <button class="range-tab" data-range="1M" type="button">1M</button>
+              <button class="range-tab" data-range="6M" type="button">6M</button>
+              <button class="range-tab" data-range="YTD" type="button">YTD</button>
+              <button class="range-tab" data-range="1Y" type="button">1Y</button>
+              <button class="range-tab" data-range="5Y" type="button">5Y</button>
+              <button class="range-tab" data-range="MAX" type="button">Max</button>
+            </div>
+            <div id="day-controls" class="day-controls">
+              <button id="previous-day" type="button" aria-label="Previous day">←</button>
+              <label for="history-date">Day</label>
+              <input id="history-date" type="date">
+              <button id="next-day" type="button" aria-label="Next day">→</button>
+            </div>
           </div>
-          <div class="chart-legend">
-            <span id="chart-min">Low --</span>
+
+          <div id="chart-scroll" class="chart-scroll">
+            <div id="chart-wrap" class="chart-wrap">
+              <canvas id="history-chart" aria-label="Weather history chart"></canvas>
+              <div id="chart-empty" class="chart-empty">History will appear after observations arrive.</div>
+              <div id="chart-tooltip" class="chart-tooltip" hidden role="status"></div>
+            </div>
+          </div>
+          <div class="chart-caption">
             <span id="chart-unit">Temperature · °F</span>
-            <span id="chart-max">High --</span>
+            <span id="chart-resolution">Each dot is one five-minute observation</span>
           </div>
         </section>
 
